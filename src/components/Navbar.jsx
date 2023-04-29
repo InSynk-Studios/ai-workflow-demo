@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { AiOutlineMenu } from "react-icons/ai";
-import { FiShoppingCart } from "react-icons/fi";
+import { FiShoppingBag, FiShoppingCart } from "react-icons/fi";
 import { BsChatLeft } from "react-icons/bs";
 import { RiNotification3Line } from "react-icons/ri";
 import { MdKeyboardArrowDown } from "react-icons/md";
@@ -59,15 +59,21 @@ const Navbar = () => {
   const handleActiveMenu = () => setActiveMenu(!activeMenu);
 
   return (
-    <div className="flex justify-between p-2 md:ml-6 md:mr-6 relative">
-      <NavButton
-        title="Menu"
-        customFunc={handleActiveMenu}
-        color={currentColor}
-        icon={<AiOutlineMenu />}
-      />
+    <div className="flex justify-between h-11 p-2 md:ml-6 md:mr-6 relative">
+      <span className="flex flex-row gap-2 items-center">
+        <span className="lg:hidden">
+          <NavButton
+            title="Menu"
+            customFunc={handleActiveMenu}
+            color={currentColor}
+            icon={<AiOutlineMenu />}
+          />
+        </span>
+        <FiShoppingBag />
+        <h2 className="font-bold">Overview</h2>
+      </span>
       <div className="flex">
-        <NavButton
+        {/* <NavButton
           title="Cart"
           customFunc={() => handleClick("cart")}
           color={currentColor}
@@ -105,7 +111,7 @@ const Navbar = () => {
             </p>
             <MdKeyboardArrowDown className="text-gray-400 text-14" />
           </div>
-        </TooltipComponent>
+        </TooltipComponent> */}
 
         {isClicked.cart && <Cart />}
         {isClicked.chat && <Chat />}
