@@ -3,7 +3,6 @@ import { DropDownListComponent } from "@syncfusion/ej2-react-dropdowns";
 import { LineChart, Stacked } from "../components";
 import { dropdownData } from "../data/dummy";
 import { useStateContext } from "../contexts/ContextProvider";
-import Area from "./Charts/Area";
 import { Launcher } from "popup-chat-react";
 import ChatBotInnerIcon from "../assets/chatBotIcon.svg";
 
@@ -22,7 +21,7 @@ const DropDown = ({ currentMode }) => (
 );
 
 const Overview = () => {
-  const { currentColor, currentMode } = useStateContext();
+  const { currentMode } = useStateContext();
   const [state, setState] = useState({
     messageList: [
       {
@@ -50,27 +49,6 @@ const Overview = () => {
       ...state,
       messageList: [...state.messageList, message],
     }));
-  }
-
-  function sendMessage(text) {
-    if (text.length > 0) {
-      const newMessagesCount = state.isOpen
-        ? state.newMessagesCount
-        : state.newMessagesCount + 1;
-
-      setState((state) => ({
-        ...state,
-        newMessagesCount: newMessagesCount,
-        messageList: [
-          ...state.messageList,
-          {
-            author: "them",
-            type: "text",
-            data: { text },
-          },
-        ],
-      }));
-    }
   }
 
   function onClick() {
