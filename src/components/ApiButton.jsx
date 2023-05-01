@@ -7,7 +7,7 @@ function ApiButton() {
   const handleClick = async () => {
     try {
       const { data } = await axios.post(
-        "http://44.202.139.56/api/v1/queryoverdoc",
+        "https://44.202.139.56/api/v1/queryoverdoc",
         {
           query:
             "Summarize the MongoDB Quarterly results and then give a Campaign idea based on the summary and then give me 3 sample twitter campaign content(each content should have atleast 3 lines worth of text) also",

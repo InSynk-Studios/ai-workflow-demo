@@ -27,7 +27,7 @@ const Overview = () => {
 
   useEffect(() => {
     axios
-      .get("http://44.202.139.56/api/v1/pastcampaigns")
+      .get("https://44.202.139.56/api/v1/pastcampaigns")
       .then((response) => setData(response?.data))
       .catch((error) => console.log(error));
   }, []);

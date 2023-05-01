@@ -30,7 +30,7 @@ const ChatBot = () => {
     setIsTyping(true);
     axios
       .post("https://44.202.139.56/api/v1/queryoverdoc", {
-        query: JSON.stringify(userMessage),
+        query: userMessage,
       })
       .then((response) => {
         const { data } = response;
@@ -64,7 +64,7 @@ const ChatBot = () => {
                 >
                   <div
                     className={`bg-${
-                      message.sender === "user" ? "black" : "gray-200"
+                      message.sender === "user" ? "black" : "gray-300"
                     } rounded-lg py-1 px-3 max-w-xs break-words ${
                       message.sender === "user" ? "text-white" : "text-gray-700"
                     }`}
