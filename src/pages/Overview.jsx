@@ -5,6 +5,7 @@ import { dropdownData } from "../data/dummy";
 import { useStateContext } from "../contexts/ContextProvider";
 import ChatBot from "../components/ChatBot";
 import axios from "axios";
+import ApiButton from "../components/ApiButton";
 
 const DropDown = ({ currentMode }) => (
   <div className="w-28 border-1 border-color px-2 py-1 rounded-md">
@@ -26,7 +27,7 @@ const Overview = () => {
 
   useEffect(() => {
     axios
-      .get("https://44.202.139.56/api/v1/pastcampaigns")
+      .get("http://44.202.139.56/api/v1/pastcampaigns")
       .then((response) => setData(response?.data))
       .catch((error) => console.log(error));
   }, []);
@@ -73,6 +74,7 @@ const Overview = () => {
             </div>
           ))}
         </div>
+        <ApiButton />
         <ChatBot />
       </div>
     </>
