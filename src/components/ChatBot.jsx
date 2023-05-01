@@ -9,8 +9,8 @@ const ChatBot = () => {
   const [showChatbot, setShowChatbot] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
   const [messages, setMessages] = useState([
-    { text: "Hi, I am a chatbot! How can I help you?", sender: "chatbot" },
-    { text: "Hi, I am a chatbot! How can I help you?", sender: "chatbot" },
+    { text: "Hello!", sender: "chatbot" },
+    { text: "I am a chatbot! How can I help you?", sender: "chatbot" },
   ]);
   const [userMessage, setUserMessage] = useState("");
 
@@ -29,12 +29,12 @@ const ChatBot = () => {
     setUserMessage("");
     setIsTyping(true);
     axios
-      .post("http://44.202.139.56/api/v1/queryoverdoc", {
-        query: userMessage,
+      .post("https://44.202.139.56/api/v1/queryoverdoc", {
+        query: JSON.stringify(userMessage),
       })
       .then((response) => {
-        // const { data } = response;
-        setMessages([...messages, { sender: "chatbot", text: response?.data }]);
+        const { data } = response;
+        setMessages([...messages, { sender: "chatbot", text: data }]);
       })
       .catch((error) => console.error(error));
     setIsTyping(false);
