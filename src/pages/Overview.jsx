@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { DropDownListComponent } from "@syncfusion/ej2-react-dropdowns";
 import { LineChart, Stacked } from "../components";
 import { dropdownData } from "../data/dummy";
 import { useStateContext } from "../contexts/ContextProvider";
 import { Launcher } from "popup-chat-react";
-import ChatBotInnerIcon from "../assets/chatBotIcon.svg";
+import ChatBotInnerIcon from "../assets/chatBotInnerIcon.svg";
+import ChatBot from "../components/ChatBot";
+import axios from "axios";
 
 const DropDown = ({ currentMode }) => (
   <div className="w-28 border-1 border-color px-2 py-1 rounded-md">
@@ -21,6 +23,7 @@ const DropDown = ({ currentMode }) => (
 );
 
 const Overview = () => {
+  const [pastCampaignData, setData] = useState([]);
   const { currentMode } = useStateContext();
   const [state, setState] = useState({
     messageList: [
@@ -44,13 +47,39 @@ const Overview = () => {
     fileUpload: false,
   });
 
+  useEffect(() => {
+    axios
+      .get("http://44.202.139.56/api/v1/pastcampaigns")
+      .then((response) => setData(response?.data))
+      .catch((error) => console.log(error));
+  }, []);
+
   function onMessageWasSent(message) {
     setState((state) => ({
       ...state,
       messageList: [...state.messageList, message],
     }));
   }
+  function sendMessage(text) {
+    if (text.length > 0) {
+      const newMessagesCount = state.isOpen
+        ? state.newMessagesCount
+        : state.newMessagesCount + 1;
 
+      setState((state) => ({
+        ...state,
+        newMessagesCount: newMessagesCount,
+        messageList: [
+          ...state.messageList,
+          {
+            author: "them",
+            type: "text",
+            data: { text },
+          },
+        ],
+      }));
+    }
+  }
 
   function onClick() {
     setState((state) => ({
@@ -86,7 +115,26 @@ const Overview = () => {
             </div>
           </div>
         </div>
-        <Launcher
+        <div className="mt-20 mx-5">
+          <h1 className="text-3xl font-bold my-4">Past Campaigns</h1>
+          {pastCampaignData?.data?.map((item) => (
+            <div
+              key={item.title}
+              className="border bg-white rounded-2xl my-4"
+            >
+              <div className="flex items-center h-14 bg-cyan-500 text-white rounded-t-2xl w-full">
+                <h2 className="text-xl font-bold p-4">{item.title}</h2>
+              </div>
+              <div className="p-4">
+                <p className="my-2">{item.content}</p>
+                <p className="my-2 text-sm flex justify-end">
+                  Total views - {item.total_views}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+        {/* <Launcher
           agentProfile={{
             teamName: "Chat bot",
             imageUrl: ChatBotInnerIcon,
@@ -99,7 +147,8 @@ const Overview = () => {
           showEmoji={false}
           fileUpload={state.fileUpload}
           placeholder="Let's have a chat..."
-        />
+        /> */}
+        <ChatBot />
       </div>
     </>
   );
