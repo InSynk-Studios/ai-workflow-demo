@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { DropDownListComponent } from "@syncfusion/ej2-react-dropdowns";
-import { LineChart, Stacked } from "../components";
+import { LineChart, Spinner, Stacked } from "../components";
 import { dropdownData } from "../data/dummy";
 import { useStateContext } from "../contexts/ContextProvider";
 import ChatBot from "../components/ChatBot";
@@ -60,19 +60,28 @@ const Overview = () => {
         </div>
         <div className="mt-20 mx-5">
           <h1 className="text-3xl font-bold my-4">Past Campaigns</h1>
-          {pastCampaignData?.data?.map((item) => (
-            <div key={item.title} className="border bg-white rounded-2xl my-4">
-              <div className="flex items-center h-14 bg-cyan-500 text-white rounded-t-2xl w-full">
-                <h2 className="text-xl font-bold p-4">{item.title}</h2>
+          {pastCampaignData?.data ? (
+            pastCampaignData?.data?.map((item) => (
+              <div
+                key={item.title}
+                className="border bg-white rounded-2xl my-4"
+              >
+                <div className="flex items-center h-14 bg-cyan-500 text-white rounded-t-2xl w-full">
+                  <h2 className="text-xl font-bold p-4">{item.title}</h2>
+                </div>
+                <div className="p-4">
+                  <p className="my-2">{item.content}</p>
+                  <p className="my-2 text-sm flex justify-end">
+                    Total views - {item.total_views}
+                  </p>
+                </div>
               </div>
-              <div className="p-4">
-                <p className="my-2">{item.content}</p>
-                <p className="my-2 text-sm flex justify-end">
-                  Total views - {item.total_views}
-                </p>
-              </div>
+            ))
+          ) : (
+            <div className="flex justify-center">
+              <Spinner />
             </div>
-          ))}
+          )}
         </div>
         <ApiButton />
         <ChatBot />
