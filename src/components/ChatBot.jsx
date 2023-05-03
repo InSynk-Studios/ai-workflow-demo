@@ -8,11 +8,12 @@ import ChatBotCrossIcon from "../assets/chatBotCrossIcon.svg";
 const ChatBot = () => {
   const [showChatbot, setShowChatbot] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
-  const [messages, setMessages] = useState({
+  const [message, setMessage] = useState({
     text: "I am a chatbot! How can I help you?",
     sender: "chatbot",
   });
   const [userMessage, setUserMessage] = useState("");
+  const [chatMessages, setChatMessages] = useState([]);
 
   const toggleChatbot = () => {
     setShowChatbot(!showChatbot);
@@ -25,7 +26,8 @@ const ChatBot = () => {
   const handleUserMessageSubmit = (event) => {
     event.preventDefault();
     if (userMessage.trim() === "") return;
-    setMessages({ sender: "user", text: userMessage });
+    // setMessage({ sender: "user", text: userMessage });
+    setChatMessages([...chatMessages, { sender: "user", text: userMessage }]);
     setUserMessage("");
     axios
       .post("https://44.202.139.56/api/v1/queryoverdoc", {
@@ -34,7 +36,11 @@ const ChatBot = () => {
       .then((response) => {
         setIsTyping(true);
         const { data } = response;
-        setMessages({ sender: "chatbot", text: data.data });
+        // setMessage({ sender: "chatbot", text: data.data });
+        setChatMessages([
+          ...chatMessages,
+          { sender: "chatbot", text: data.data },
+        ]);
         setIsTyping(false);
       })
       .catch((error) => console.error(error));
@@ -42,7 +48,7 @@ const ChatBot = () => {
 
   const renderChatbot = () => {
     return (
-      <div className="fixed bottom-16 right-2 w-96 h-[450px] bg-white border border-gray-400 rounded-xl shadow-xl">
+      <div className="fixed bottom-16 right-2 w-96 h-[450px] bg-white rounded-xl shadow-xl">
         <div className="flex items-center justify-between h-14 px-4 py-2 bg-black rounded-t-xl">
           <span className="flex flex-row gap-4 items-center">
             <img src={ChatBotInnerIcon} alt="" />
@@ -54,31 +60,33 @@ const ChatBot = () => {
         </div>
         <div className="flex flex-col justify-between bg-white w-full h-full rounded-b-lg px-4 py-2">
           <div className="overflow-y-scroll">
-            <div className="space-y-2">
-              <div
-                className={`flex justify-${
-                  messages.sender === "user" ? "end" : "start"
-                }`}
-              >
+            {chatMessages?.map((chat) => (
+              <div key={chat.index} className="space-y-2">
                 <div
-                  className={`bg-${
-                    messages.sender === "chatbot" ? "gray-300" : "black"
-                  } rounded-lg py-1 px-3 max-w-xs break-words ${
-                    messages.sender === "user" ? "text-white" : "text-gray-700"
+                  className={`flex justify-${
+                    chat.sender === "user" ? "end" : "start"
                   }`}
                 >
-                  {messages.sender === "chatbot" && isTyping ? (
-                    <div className="flex items-center mt-1">
-                      <div className="w-2 h-2 bg-gray-600 rounded-full mr-1 animate-bounce"></div>
-                      <div className="w-2 h-2 bg-gray-600 rounded-full mr-1 animate-bounce"></div>
-                      <div className="w-2 h-2 bg-gray-600 rounded-full mr-1 animate-bounce"></div>
-                    </div>
-                  ) : (
-                    messages.text
-                  )}
+                  <div
+                    className={`bg-${
+                      chat.sender === "chatbot" ? "gray-300" : "black"
+                    } rounded-lg py-1 px-3 max-w-xs break-words ${
+                      chat.sender === "user" ? "text-white" : "text-gray-700"
+                    }`}
+                  >
+                    {chat.sender === "chatbot" && isTyping ? (
+                      <div className="flex items-center mt-1">
+                        <div className="w-2 h-2 bg-gray-600 rounded-full mr-1 animate-bounce"></div>
+                        <div className="w-2 h-2 bg-gray-600 rounded-full mr-1 animate-bounce"></div>
+                        <div className="w-2 h-2 bg-gray-600 rounded-full mr-1 animate-bounce"></div>
+                      </div>
+                    ) : (
+                      chat.text
+                    )}
+                  </div>
                 </div>
               </div>
-            </div>
+            ))}
           </div>
           <form onSubmit={handleUserMessageSubmit} className="mt-2 w-full">
             <div className="flex items-center w-full">
